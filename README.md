@@ -2,17 +2,23 @@ Socractic AI is an application that integrates openai and gemini services to run
 
 The following instructions will help in setting up the application on a local machine. 
 
+### Clone Repository
+
 Begin with cloning the github repository on the local machine using the following command 
 
 ``` git clone https://github.com/ahmednadiyah1/Socratic-AI/ ```
+
+### Install Dependencies
 
 Next, install all dependencies related to the project 
 
 ``` pip install -r requirements.txt ```
 
+### Setup Frontend and Backend Servers on the Local Machine
+
 We will setup the frontend and the backend in two different terminals, running simultaneously.
 
-To begin with the backend, start the service and create an endpoint with fastapi with the following command \\
+To begin with the backend, start the service and create an endpoint with fastapi with the following command
 
 ```fastapi dev main.py```
 
