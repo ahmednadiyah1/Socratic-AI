@@ -34,7 +34,7 @@ if st.button("Generate response"):
             if max_tokens:
                  payload["max_tokens"] = int(max_tokens)
 
-            backend_url = "http://0.0.0.0:8000/generate_with_socratic/"  # Update with your backend URL
+            backend_url = "https://socratic-ai-1.onrender.com/generate_with_socratic/"  # Update with backend URL
             response = requests.post(backend_url, json = payload)
 
             # check if the request was successful
