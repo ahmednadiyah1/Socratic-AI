@@ -1,7 +1,8 @@
 openai
 google-genai
 nltk
-fastapi
+fastapi[standard]
+uvicorn[standard]
 pydantic
 dotenv
 streamlit
