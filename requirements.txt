@@ -1,0 +1,7 @@
+openai
+google-genai
+nltk
+fastapi
+pydantic
+dotenv
+streamlit
