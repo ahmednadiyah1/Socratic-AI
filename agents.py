@@ -17,7 +17,7 @@ gemini_client = genai.Client(api_key = os.getenv("GEMINI_API_KEY"))
 
 class socratic_ai_tutor:
     def __init__(self, concept, learning_style,model1 = "gemma3:1b", model2 = "qwen3.5"):
-        self.agentic_model = model1
+        self.llm = ChatOllama(model=model1, validate_model_on_init=True, base_url = "https://socratic-ai-ollama.onrender.com")
 
         self.messages = []
 
@@ -45,8 +45,8 @@ class socratic_ai_tutor:
     def create_knowledge_graph(self, text):
 
         documents = [Document(page_content=text)]
-        llm = ChatOllama(model=self.agentic_model, validate_model_on_init=True)
-        llm_transformer = LLMGraphTransformer(llm = llm)
+        # llm = ChatOllama(model=self.agentic_model, validate_model_on_init=True)
+        llm_transformer = LLMGraphTransformer(llm = self.llm)
         graph_documents = llm_transformer.convert_to_graph_documents(documents)
 
         # llm_transformer_filtered = LLMGraphTransformer(
@@ -107,14 +107,14 @@ class socratic_ai_tutor:
             - Keep it engaging and interactive'''
 
 
-        llm = ChatOllama(model = self.agentic_model, validate_model_on_init=True)
+        # llm = ChatOllama(model = self.agentic_model, validate_model_on_init=True)
 
         messages = [
             {"role": "system", "content": system_instruction},
             {"role": "user", "content": f"Create a lesson plan for the concept {self.concept} based on the following knowledge graph: {knowledge_graph} and tailored to the following learning style: {self.learning_style}. The lesson plan should be structured in a way that follows the prerequisite order of the concepts in the knowledge graph."}
         ]
         
-        lesson_plan = llm.invoke(messages)
+        lesson_plan = self.llm.invoke(messages)
 
         return lesson_plan.content
 
