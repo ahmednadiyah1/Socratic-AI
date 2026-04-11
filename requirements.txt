@@ -1,7 +1,8 @@
-openai
 google-genai
-nltk
 fastapi
 pydantic
 dotenv
 streamlit
+langchain
+tavily
+langchain_experimental
