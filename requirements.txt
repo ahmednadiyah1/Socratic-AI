@@ -1,8 +1,11 @@
 google-genai
+uvicorn
 fastapi
 pydantic
 dotenv
 streamlit
 langchain
 tavily
+langchain_core
 langchain_experimental
+langchain_ollama
