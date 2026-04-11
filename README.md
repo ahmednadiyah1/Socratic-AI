@@ -2,6 +2,14 @@ Socractic AI is an application that integrates openai and gemini services to run
 
 The following instructions will help in setting up the application on a local machine. 
 
+### Setup Ollama and pull gemma3:1b model from Ollama
+
+Use the following link to download Ollama in your local system: https://ollama.com/download/windows
+
+We are going to be pulling the gemma3:1b model from Ollama. Run the following command in command prompt
+
+``` ollama run gemma3:1b ```
+
 ### Clone Repository
 
 Begin with cloning the github repository on the local machine using the following command 
