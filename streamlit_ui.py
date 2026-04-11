@@ -1,38 +1,62 @@
 import streamlit as st
 import requests
+import uuid
+
+
+# get session id
+if "session_id" not in st.session_state:
+    st.session_state.session_id = str(uuid.uuid4())
+
+
+# initialise session state for messages
+if "messages" not in st.session_state:
+     st.session_state.messages = []
+
 
 # set page config
 st.set_page_config(page_title = "My App", layout = "wide")
 
 st.title("Socratic AI App")
-st.markdown("Select a service, enter your prompt, and see the NLP-processed output.")
+st.markdown("Learn with Socratic AI Tutor")
 
 # sidebar for configuration
 with st.sidebar:
     st.header("Settings")
-    service = st.selectbox("Choose service", ["gemini", "openai"])
+    learning_style = st.selectbox("Choose your learning style technique", ["Active Recall", "Scaffolding", "Analogy-Based", "Metacognition"])
 
-    model = st.text_input("Enter Model Name")
-    max_tokens = st.text_input("Max Tokens")
-    st.info(f"Currently targeting {model} via {service}")
+    concept = st.text_input("What woould you like to learn today?")
 
-prompt = st.text_area("Enter your prompt")
+for msg in st.session_state.messages:
+    
+    if msg["role"] == "user":
+        st.chat_message("user").write(msg["content"])
+
+    else:
+        st.chat_message("AI Tutor").write(msg["content"])
+
+
+prompt = st.chat_input("Enter your prompt")
 
 # create a button to trigger the api call
-if st.button("Generate response"):
-    if not prompt.strip() or not model.strip() or not service.strip():
-        st.error("Please fill in all fields before generating a response.")
+if prompt:
+    # # if not prompt.strip() or not learning_style.strip() or not concept.strip():
+    if not concept.strip():
+        st.error("Please provide a topic to learn with the AI tutor")
 
     else:
         try:
+            st.session_state.messages.append({
+                "role": "user",
+                "content": prompt
+            })
+
             payload = {
-                "service": service,
-                "model": model,
+                "session_id": st.session_state.session_id,
+                "concept": concept,
+                "learning_style": learning_style,
                 "prompt": prompt
             }
 
-            if max_tokens:
-                 payload["max_tokens"] = int(max_tokens)
 
             backend_url = "https://socratic-ai-1.onrender.com/generate_with_socratic/"  # Update with backend URL
             response = requests.post(backend_url, json = payload)
@@ -41,15 +65,19 @@ if st.button("Generate response"):
             if response.status_code == 200:
                 data = response.json()
 
-                st.divider()
+                # add assistant response
+                st.session_state.messages.append({
+                    "role": "assistant",
+                    "content": data["response"]
+                })
 
-                # display the response clearly
-                st.markdown("##### Response is ")
-                st.write(data["response"])
 
-                st.markdown("##### NLP preprocessing details")
-                st.write("Tokens: ", data["input_word_tokens"])
-                st.write("Lemmatized words: ", data["input_lemmatized_words"])
+                for msg in st.session_state.messages:
+                    if msg["role"] == "user":
+                        st.chat_message("user").write(msg["content"])
+                    else:
+                        st.chat_message("assistant").write(msg["content"])
+
 
             else:
                 st.error(f"API Error: {response.status_code} - {response.text}")

@@ -1,8 +1,8 @@
-openai
 google-genai
-nltk
-fastapi[standard]
-uvicorn[standard]
+fastapi
 pydantic
 dotenv
 streamlit
+langchain
+tavily
+langchain_experimental
