@@ -16,7 +16,7 @@ tavily_client = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
 gemini_client = genai.Client(api_key = os.getenv("GEMINI_API_KEY"))
 
 class socratic_ai_tutor:
-    def __init__(self, concept, learning_style,model1 = "gemma3:1b", model2 = "qwen3.5"):
+    def __init__(self, concept, learning_style, model1 = "llama3", model2 = "qwen3.5"):
         self.llm = ChatOllama(model=model1, validate_model_on_init=True, base_url = "https://socratic-ai-ollama.onrender.com")
 
         self.messages = []

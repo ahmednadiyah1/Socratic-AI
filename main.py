@@ -1,12 +1,14 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-
 from agents import socratic_ai_tutor
 
 
 app = FastAPI()
 
 session_ids = {}
+
+
+
 def run(session_id, prompt, concept, learning_style):
     if session_id not in session_ids:
         session_ids[session_id] = socratic_ai_tutor(concept, learning_style)
