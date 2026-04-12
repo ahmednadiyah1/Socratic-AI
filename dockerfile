@@ -1,4 +1,8 @@
 # dockerfile to run ollama on render
 FROM ollama/ollama:latest
+
+# Pull the model during the IMAGE BUILD, not at runtime
+RUN ollama serve & sleep 5 && ollama pull llama3 && pkill ollama
+
 EXPOSE 11434
-RUN ollama serve & sleep 10 && ollama pull gemma3:1b && ollama pull qwen3.5
+CMD ["ollama", "serve"]
