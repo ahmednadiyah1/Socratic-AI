@@ -6,9 +6,9 @@ The following instructions will help in setting up the application on a local ma
 
 Use the following link to download Ollama in your local system: https://ollama.com/download/windows
 
-We are going to be pulling the gemma3:1b model from Ollama. Run the following command in command prompt
+We are going to be pulling the llama3 model from Ollama. Run the following command in command prompt
 
-``` ollama run gemma3:1b ```
+``` ollama run llama3 ```
 
 ### Clone Repository
 
