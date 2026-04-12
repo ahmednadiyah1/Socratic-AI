@@ -6,9 +6,9 @@ The following instructions will help in setting up the application on a local ma
 
 Use the following link to download Ollama in your local system: https://ollama.com/download/windows
 
-We are going to be pulling the llama3 model from Ollama. Run the following command in command prompt
+We are going to be pulling the gemma3:1b model from Ollama. Run the following command in command prompt
 
-``` ollama run llama3 ```
+``` ollama run gemma3:1b ```
 
 ### Clone Repository
 
@@ -26,6 +26,7 @@ Next, install all dependencies related to the project
 
 We will setup the frontend and the backend in two different terminals, running simultaneously.
 
+
 To begin with the backend, start the service and create an endpoint with fastapi with the following command
 
 ```fastapi dev main.py```
@@ -38,4 +39,4 @@ Now we move onto setting up the frontend by the time the backend service starts 
 
 ``` streamlit run streamlit_ui.py ```
 
-Once, both services are up and running, open access the frontend on URL: http://localhost:8501 and test it out!
+The frontend, backend and the gemma3:1b model from Ollama are deployed on render.com, open access the frontend on URL: http://localhost:8501 and test it out!
