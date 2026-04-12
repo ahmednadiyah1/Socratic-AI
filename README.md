@@ -42,3 +42,5 @@ Now we move onto setting up the frontend by the time the backend service starts 
 Once the model has been set-up and the frontend and backend services are up and running, open access the frontend on URL: http://localhost:8501 and test it out!
 
 The frontend, backend and the gemma3:1b model from Ollama are also deployed on render.com and the application can be accessed through the following link- https://socratic-ai-2.onrender.com
+
+NOTE- the docker file in this repository is used to create an image for ollama and pull and deploy gemma3:1b model on render.com.
