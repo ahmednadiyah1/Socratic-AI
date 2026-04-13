@@ -67,7 +67,8 @@ if prompt:
                 }
 
 
-                backend_url = "https://socratic-ai-1.onrender.com/generate_with_socratic/"  # Update with backend URL
+                # backend_url = "https://socratic-ai-1.onrender.com/generate_with_socratic/"  # Update with backend URL
+                backend_url = "http://127.0.0.1:8000/generate_with_socratic/"  # Localhost URL for testing
                 response = requests.post(backend_url, json = payload)
 
                 response = None
