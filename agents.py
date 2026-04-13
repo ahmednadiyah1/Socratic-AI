@@ -20,10 +20,14 @@ ngrok_headers = {"Authorization": f"Bearer {os.getenv('NGROK_AUTH_TOKEN')}",
 
 class socratic_ai_tutor:
     def __init__(self, concept, learning_style, model1 = "gemma3:1b", model2 = "qwen3.5"):
-        self.llm = ChatOllama(model=model1, 
+        try:    
+            self.llm = ChatOllama(model=model1, 
                               validate_model_on_init=True, 
                               base_url = "https://socratic-ai-ollama.onrender.com",
                               client_kwargs = ngrok_headers)
+            
+        except Exception as e:
+            raise RuntimeError(f"Error initializing LLM: {e}")
 
         self.messages = []
 
