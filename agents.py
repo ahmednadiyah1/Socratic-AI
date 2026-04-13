@@ -16,7 +16,7 @@ load_dotenv()
 tavily_client = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
 gemini_client = genai.Client(api_key = os.getenv("GEMINI_API_KEY"))
 
-http_client = httpx.Client({"ngrok-Skip-Client-Validation": "true"}, verify = False)
+http_client = httpx.Client(headers={"ngrok-Skip-Client-Validation": "true"}, verify = False)
 
 class socratic_ai_tutor:
     def __init__(self, concept, learning_style, model1 = "gemma3:1b", model2 = "qwen3.5"):
