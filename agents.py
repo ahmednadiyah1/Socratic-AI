@@ -22,7 +22,7 @@ class socratic_ai_tutor:
     def __init__(self, concept, learning_style, model1 = "gemma3:1b", model2 = "qwen3.5"):
         try:    
             self.llm = ChatOllama(model=model1, 
-                              validate_model_on_init=True, 
+                              validate_model_on_init=False, 
                               base_url = "https://splendor-ranked-wind.ngrok-free.dev",
                               http_client = http_client)
             
