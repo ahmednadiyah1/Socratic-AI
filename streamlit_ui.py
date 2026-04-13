@@ -54,65 +54,65 @@ if prompt:
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
 
-        with st.spinner("Generating response...")
+        with st.spinner("Generating response..."):
 
-        try:
-
-
-            payload = {
-                "session_id": st.session_state.session_id,
-                "concept": concept,
-                "learning_style": learning_style,
-                "prompt": prompt
-            }
+            try:
 
 
-            backend_url = "https://socratic-ai-1.onrender.com/generate_with_socratic/"  # Update with backend URL
-            response = requests.post(backend_url, json = payload)
-
-            response = None
-            for attempt in range(3):
-                try:
-                    response = requests.post(
-                        backend_url,
-                        json = payload,
-                        timeout = 30
-                    )
-                    if response.status_code == 429:
-                        wait = 2 ** attempt
-                        st.toast(f"Rate limited, retrying in {wait}s...")
-
-                        time.sleep(wait)
-                        continue
-                    break  # success or non-429 error, stop retrying
+                payload = {
+                    "session_id": st.session_state.session_id,
+                    "concept": concept,
+                    "learning_style": learning_style,
+                    "prompt": prompt
+                }
 
 
-                except requests.exceptions.Timeout:
-                    if attempt < 2:
-                        st.toast(f"Timeout, retrying... (attempt {attempt + 2}/3)")
-                        continue
-                    st.error("Request timed out after 3 attempts. The server may be waking up — please try again.")
-                    st.stop()
+                backend_url = "https://socratic-ai-1.onrender.com/generate_with_socratic/"  # Update with backend URL
+                response = requests.post(backend_url, json = payload)
+
+                response = None
+                for attempt in range(3):
+                    try:
+                        response = requests.post(
+                            backend_url,
+                            json = payload,
+                            timeout = 30
+                        )
+                        if response.status_code == 429:
+                            wait = 2 ** attempt
+                            st.toast(f"Rate limited, retrying in {wait}s...")
+
+                            time.sleep(wait)
+                            continue
+                        break  # success or non-429 error, stop retrying
 
 
-            if response and response.status_code == 200:
-                data = response.json()
-                assistant_msg = data["response"]
+                    except requests.exceptions.Timeout:
+                        if attempt < 2:
+                            st.toast(f"Timeout, retrying... (attempt {attempt + 2}/3)")
+                            continue
+                        st.error("Request timed out after 3 attempts. The server may be waking up — please try again.")
+                        st.stop()
 
-                st.session_state.messages.append({
-                    "role": "assistant",
-                    "content": assistant_msg
-                })
-                # ✅ Only render the new assistant message, not all messages again
-                st.chat_message("assistant").write(assistant_msg)
 
-            else:
-                status = response.status_code if response else "No response"
-                text = response.text if response else ""
-                st.error(f"API Error: {status} - {text}")
+                if response and response.status_code == 200:
+                    data = response.json()
+                    assistant_msg = data["response"]
 
-        except Exception as e:
-            st.error(f"Connection failed. Is your FastAPI server running? Error: {e}")
+                    st.session_state.messages.append({
+                        "role": "assistant",
+                        "content": assistant_msg
+                    })
+                    # ✅ Only render the new assistant message, not all messages again
+                    st.chat_message("assistant").write(assistant_msg)
+
+                else:
+                    status = response.status_code if response else "No response"
+                    text = response.text if response else ""
+                    st.error(f"API Error: {status} - {text}")
+
+            except Exception as e:
+                st.error(f"Connection failed. Is your FastAPI server running? Error: {e}")
 
 
 
