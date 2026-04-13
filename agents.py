@@ -23,7 +23,7 @@ class socratic_ai_tutor:
         try:    
             self.llm = ChatOllama(model=model1, 
                               validate_model_on_init=True, 
-                              base_url = " https://splendor-ranked-wind.ngrok-free.dev",
+                              base_url = "https://splendor-ranked-wind.ngrok-free.dev",
                               http_client = http_client)
             
         except Exception as e:
