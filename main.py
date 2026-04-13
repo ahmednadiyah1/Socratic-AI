@@ -17,9 +17,7 @@ def run(session_id, prompt, concept, learning_style):
     return tutor.interact_with_user(prompt)
 
 
-
-        
-             
+    
 
 class TextGenerationRequest(BaseModel):
      session_id: str
