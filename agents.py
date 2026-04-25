@@ -2,20 +2,21 @@ from langchain_huggingface import HuggingFaceEndpoint
 from langchain_core.documents import Document
 from langchain_experimental.graph_transformers import LLMGraphTransformer
 from tavily import TavilyClient
-from google import genai
-from google.genai import types
+# from google import genai
+# from google.genai import types
+from mistralai.client import Mistral
 import os
 from dotenv import load_dotenv
 import json
-import httpx
+
 
 load_dotenv()
 
 
 
 tavily_client = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
-gemini_client = genai.Client(api_key = os.getenv("GEMINI_API_KEY"))
-
+# gemini_client = genai.Client(api_key = os.getenv("GEMINI_API_KEY"))
+mistral = Mistral(api_key=os.getenv("MISTRAL_API"))
 
 
 class socratic_ai_tutor:
@@ -144,20 +145,27 @@ class socratic_ai_tutor:
         )
 
         try:
-            response = gemini_client.models.generate_content(
-                model="gemini-3-flash-preview",
-                config=types.GenerateContentConfig(
-                    system_instruction=system_prompt),
-                contents=f"{history_text}\nuser: {prompt}"
-            )
+            # response = gemini_client.models.generate_content(
+            #     model="gemini-3-flash-preview",
+            #     config=types.GenerateContentConfig(
+            #         system_instruction=system_prompt),
+            #     contents=f"{history_text}\nuser: {prompt}"
+            # )
+
+
+
+            response = mistral.chat.complete(model = "mistral-small-latest",
+                                                messages = [{"role": "system", "content": system_prompt},
+                                                            *self.messages])
 
         except Exception as e:
             print(f"Error initializing model: {e}")
             raise e
         
-        self.messages.append({"role": "assistant", "content": response.text})
+        assistant_response = response.choices[0].message.content
+        self.messages.append({"role": "assistant", "content": assistant_response})
 
-        return response.text
+        return assistant_response
         
         
         

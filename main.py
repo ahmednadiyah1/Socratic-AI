@@ -1,20 +1,40 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from agents import socratic_ai_tutor
+import nltk
+nltk.download('punkt_tab')
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
+from nltk import pos_tag
+import string
+
 
 app = FastAPI()
 
 session_ids = {}
 
+
+def get_wordnet_pos(tag):
+    if tag.startswith('J'):
+        return 'a'
+    elif tag.startswith('V'):
+        return 'v'
+    elif tag.startswith('N'):
+        return 'n'
+    elif tag.startswith('R'):
+        return 'r'
+    else:
+        return 'n'
+
 def preprocess_prompt(prompt):
      lemmatizer = WordNetLemmatizer()
 
-     tokens = word_tokenize(prompt)
-     lemmatized_words = [lemmatizer.lemmatize(w) for w in tokens]
+     tokens = word_tokenize(prompt.lower())
+     tagged = pos_tag(tokens)
 
-     return "Preprocessed text: " + " ".join(lemmatized_words)
+     lemmatized_words = [lemmatizer.lemmatize(w, get_wordnet_pos(tag)) for w, tag in tagged if (w not in string.punctuation)]
+
+     return f"Preprocessed text: {lemmatized_words}"
 
 def run(session_id, prompt, concept, learning_style):
     if session_id not in session_ids:
