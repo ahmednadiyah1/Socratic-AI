@@ -4,7 +4,7 @@ from agents import socratic_ai_tutor
 import nltk
 nltk.download('punkt_tab')
 nltk.download('averaged_perceptron_tagger_eng')
-ltk.download('wordnet')
+nltk.download('wordnet')
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk import pos_tag
