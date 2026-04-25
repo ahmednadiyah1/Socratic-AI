@@ -4,6 +4,7 @@ fastapi
 pydantic
 dotenv
 streamlit
+nltk
 langchain
 tavily
 langchain_core
