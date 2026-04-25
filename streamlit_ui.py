@@ -2,6 +2,61 @@ import streamlit as st
 import requests
 import uuid
 import time
+import base64
+
+
+# convert image to base64
+def get_base64_image(path):
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+    
+# setting a colour sceheme and applying it to all message boxes, chat box and sidebar
+
+# setting colour scheme for side bar
+st.markdown("""
+<style>
+[data-testid="stSidebar"] {
+    background-color: #FFEFE8;  /* light peach */
+}
+</style>
+""", unsafe_allow_html=True)
+
+# setting colour scheme for message boxes and chat box
+st.markdown("""
+<style>
+
+/* MAIN chat container (removes grey background) */
+[data-testid="stChatFloatingInputContainer"],
+[data-testid="stChatMessage"],
+[data-testid="stChatMessageList"] {
+    background: transparent;
+}
+
+
+/* Message wrapper */
+[data-testid="stChatMessage"] {
+    background: transparent;
+    padding: 0;
+    border: none;
+}
+
+/* Message bubble */
+[data-testid="stChatMessageContent"] {
+    background-color: #FFEFE8;
+    border-radius: 12px;
+    padding: 10px;
+}
+
+/* User vs assistant differentiation */
+[data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"])
+[data-testid="stChatMessageContent"] {
+    background-color: #FFEFE8;
+}
+            
+
+
+</style>
+""", unsafe_allow_html=True)
 
 # set page config
 st.set_page_config(page_title = "Socratic AI", layout = "wide")
@@ -23,8 +78,50 @@ if "is_loading" not in st.session_state:
 
 # page header
 
-st.title("Socratic AI App")
-st.markdown("Learn with Socratic AI Tutor")
+logo_base64 = get_base64_image("logo.png")
+st.markdown(f"""
+<style>
+.header {{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}}
+
+.header-inner {{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 600px;  /* controls total width */
+}}
+
+.header-title {{
+    flex: 1;
+    text-align: center;
+    font-size: 64px;
+    font-weight: 700;
+    margin: 0;
+    white-space: nowrap;
+}}
+
+.header img {{
+    height: 50px;
+}}
+</style>
+
+<div class="header">
+    <div class="header-inner">
+        <img src="data:image/png;base64,{logo_base64}">
+        <div class="header-title">Socratic AI Tutor</div>
+        <div style="width:100px;"></div> <!-- spacer equal to logo -->
+    </div>
+</div>
+""", unsafe_allow_html=True)
+# st.image("logo.png", width = 100)
+# st.title("Socratic AI")
+
+
+
 
 # sidebar for configuration
 with st.sidebar:
