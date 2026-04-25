@@ -10,3 +10,4 @@ langchain_core
 langchain_experimental
 langchain_ollama
 json-repair
+langchain_huggingface
