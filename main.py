@@ -31,36 +31,15 @@ class TextGenerationRequest(BaseModel):
 async def generate_with_socratic(request: TextGenerationRequest):
 
 
-
     try:
-        print("Step 1: Request received")
-        print(f"Payload: {request}")
-        
-        tutor = socratic_ai_tutor(
-            concept=request.concept,
-            learning_style=request.learning_style
-        )
-        print("Step 2: Tutor initialized")
+            # call the generate_text function with the provided model and prompt
+            response = run(request.session_id,
+                         request.prompt, 
+                         request.concept,
+                         request.learning_style)
 
-        response = tutor.interact_with_user(request.prompt)
-        print("Step 3: Response generated")
-
-        return {"response": response}
-
-    except Exception as e:
-        error_detail = traceback.format_exc()
-        print(f"FULL TRACEBACK:\n{error_detail}")
-        raise HTTPException(status_code=500, detail=error_detail)
-
-    # try:
-    #         # call the generate_text function with the provided model and prompt
-    #         response = run(request.session_id,
-    #                      request.prompt, 
-    #                      request.concept,
-    #                      request.learning_style)
-
-    #         return {"response": response}
+            return {"response": response}
     
-    # except Exception as e:
-    #     raise HTTPException(status_code = 500, detail = str(e))
+    except Exception as e:
+        raise HTTPException(status_code = 500, detail = str(e))
 
