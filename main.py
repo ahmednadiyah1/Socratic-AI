@@ -29,7 +29,7 @@ class TextGenerationRequest(BaseModel):
 
 @app.post("/generate_with_socratic/") # Endpoint for text generation
 async def generate_with_socratic(request: TextGenerationRequest):
-
+    print(request.session_id)
 
     try:
             # call the generate_text function with the provided model and prompt
