@@ -1,4 +1,4 @@
-from langchain_ollama import ChatOllama
+from langchain_huggingface import HuggingFaceEndpoint
 from langchain_core.documents import Document
 from langchain_experimental.graph_transformers import LLMGraphTransformer
 from tavily import TavilyClient
@@ -13,22 +13,19 @@ load_dotenv()
 
 
 
-tavily_client = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
+tavily_client = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
 gemini_client = genai.Client(api_key = os.getenv("GEMINI_API_KEY"))
 
-http_client = httpx.Client(headers = {"ngrok-Skip-Client-Validation": "true"}, verify = False)
+
 
 class socratic_ai_tutor:
-    def __init__(self, concept, learning_style, model1 = "gemma3:1b", model2 = "qwen3.5"):
-        try:    
-            self.llm = ChatOllama(model=model1, 
-                              validate_model_on_init=False, 
-                              base_url = "https://splendor-ranked-wind.ngrok-free.dev",
-                              http_client = http_client)
-            
-        except Exception as e:
-            raise RuntimeError(f"Error initializing LLM: {e}")
-
+    def __init__(self, concept, learning_style, model_id = "meta-llama/Meta-Llama-3-8B"):
+        self.llm = HuggingFaceEndpoint(
+            repo_id = model_id,
+            task = "text-generation",         # temp set to 0 to enable the model to follow instructions clearly
+            temperature = 0,
+            huggingfacehub_api_token = os.getenv("HUGGINGFACE_API")
+        )
         self.messages = []
 
         self.concept = concept
@@ -126,7 +123,7 @@ class socratic_ai_tutor:
         
         lesson_plan = self.llm.invoke(messages)
 
-        return lesson_plan.content
+        return lesson_plan
 
 
 

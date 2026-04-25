@@ -69,31 +69,10 @@ if prompt:
 
                 backend_url = "https://socratic-ai-1.onrender.com/generate_with_socratic/"  # Update with backend URL
 
-                response = requests.post(backend_url, json = payload)
-
-                response = None
-                for attempt in range(3):
-                    try:
-                        response = requests.post(
-                            backend_url,
-                            json = payload,
-                            timeout = 30
-                        )
-                        if response.status_code == 429:
-                            wait = 2 ** attempt
-                            st.toast(f"Rate limited, retrying in {wait}s...")
-
-                            time.sleep(wait)
-                            continue
-                        break  # success or non-429 error, stop retrying
-
-
-                    except requests.exceptions.Timeout:
-                        if attempt < 2:
-                            st.toast(f"Timeout, retrying... (attempt {attempt + 2}/3)")
-                            continue
-                        st.error("Request timed out after 3 attempts. The server may be waking up — please try again.")
-                        st.stop()
+                
+                response = requests.post(
+                    backend_url,
+                    json = payload)
 
 
                 if response and response.status_code == 200:
@@ -104,7 +83,7 @@ if prompt:
                         "role": "assistant",
                         "content": assistant_msg
                     })
-                    # ✅ Only render the new assistant message, not all messages again
+                    # Only render the new assistant message, not all messages again
                     st.chat_message("assistant").write(assistant_msg)
 
                 else:
@@ -113,7 +92,8 @@ if prompt:
                     st.error(f"API Error: {status} - {text}")
 
             except Exception as e:
-                st.error(f"Connection failed. Is your FastAPI server running? Error: {e}")
+                print(e)
+                st.error(f"Connection failed.")
 
 
 
