@@ -52,6 +52,8 @@ if prompt:
 
     else:
         st.session_state.messages.append({"role": "user", "content": prompt})
+
+        # Only write messages to the output once
         st.chat_message("user").write(prompt)
 
         with st.spinner("Generating response..."):
@@ -78,12 +80,16 @@ if prompt:
                 if response and response.status_code == 200:
                     data = response.json()
                     assistant_msg = data["response"]
+                    preprocessed_prompt = data["preprocessed_prompt"]
+
 
                     st.session_state.messages.append({
                         "role": "assistant",
                         "content": assistant_msg
                     })
-                    # Only render the new assistant message, not all messages again
+
+                    st.chat_message("preprocessed_prompt").write(preprocessed_prompt)
+                    
                     st.chat_message("assistant").write(assistant_msg)
 
                 else:

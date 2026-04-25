@@ -1,13 +1,20 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from agents import socratic_ai_tutor
-import traceback
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
 
 app = FastAPI()
 
 session_ids = {}
 
+def preprocess_prompt(prompt):
+     lemmatizer = WordNetLemmatizer()
 
+     tokens = word_tokenize(prompt)
+     lemmatized_words = [lemmatizer.lemmatize(w) for w in tokens]
+
+     return "Preprocessed text: " + " ".join(lemmatized_words)
 
 def run(session_id, prompt, concept, learning_style):
     if session_id not in session_ids:
@@ -29,7 +36,8 @@ class TextGenerationRequest(BaseModel):
 
 @app.post("/generate_with_socratic/") # Endpoint for text generation
 async def generate_with_socratic(request: TextGenerationRequest):
-    print(request.session_id)
+
+    preprocessed_text = preprocess_prompt(request.prompt)
 
     try:
             # call the generate_text function with the provided model and prompt
@@ -38,7 +46,8 @@ async def generate_with_socratic(request: TextGenerationRequest):
                          request.concept,
                          request.learning_style)
 
-            return {"response": response}
+            return {"response": response,
+                    "preprocessed_prompt": preprocessed_text}
     
     except Exception as e:
         raise HTTPException(status_code = 500, detail = str(e))
