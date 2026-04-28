@@ -72,5 +72,6 @@ async def generate_with_socratic(request: TextGenerationRequest):
                     "preprocessed_prompt": preprocessed_text}
     
     except Exception as e:
+        print(e)
         raise HTTPException(status_code = 500, detail = str(e))
 

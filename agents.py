@@ -45,17 +45,18 @@ class socratic_ai_tutor:
                 include_raw_content = include_raw_content
             )
 
+
         except Exception as e:
-            print("Tavily API connection failed: {e}")
+            print(f"Tavily API connection failed: {e}")
             raise e
 
         text = "\n".join([r["content"] for r in results["results"]])
-
+        print(text)
         return text        
 
     # create a knowledge graph
     def create_knowledge_graph(self, text):
-        if not text or text.strip():
+        if not text or not text.strip():
             raise HTTPException(status_code = 400, detail = "Input text is empty")
         
         try:
@@ -158,19 +159,8 @@ class socratic_ai_tutor:
 
         self.messages.append({"role": "user", "content": prompt})
 
-        history_text = "\n".join(
-        [f"{m['role']}: {m['content']}" for m in self.messages]
-        )
 
         try:
-            # response = gemini_client.models.generate_content(
-            #     model="gemini-3-flash-preview",
-            #     config=types.GenerateContentConfig(
-            #         system_instruction=system_prompt),
-            #     contents=f"{history_text}\nuser: {prompt}"
-            # )
-
-
 
             response = mistral.chat.complete(model = "mistral-small-latest",
                                                 messages = [{"role": "system", "content": system_prompt},
